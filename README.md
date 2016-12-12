@@ -10,11 +10,10 @@ The dataset can be found here: https://www.opendataphilly.org/dataset/bicycle-th
 
 ## Getting started
 
-First make sure to have all packages installed.
-
-If you'd like to run this yourself, all code can be found at `Analysis.R`
-
-Otherwise, take a look at my findings at `Report.md`
+If you'd like to run this yourself, all code can be found in `Analysis.R`
+  Make sure to have all packages installed.
+  
+Otherwise, take a look at my findings in `Report.md`
 
 Data was pulled from `fromJSON("https://data.phila.gov/resource/pbdj-svpx.geojson")`
 
