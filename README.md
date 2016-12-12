@@ -10,8 +10,8 @@ The dataset can be found here: https://www.opendataphilly.org/dataset/bicycle-th
 
 ## Getting started
 
-If you'd like to run this yourself, all code can be found in `Analysis.R`
-  Make sure to have all packages installed.
+If you'd like to run this yourself, all code can be found in `Analysis.R`.
+  Just make sure to have all packages installed.
   
 Otherwise, take a look at my findings in `Report.md`
 
