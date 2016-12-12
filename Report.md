@@ -69,5 +69,63 @@ bike_data$theft_date <- as.Date(bike_data$theft_date)
 
 We now have a clean dataset to work with.
 
+![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/blob/master/Other/Dataset.png)
 
+
+Now for the fun part! 
+
+##Theft Trends
+
+With the dates of reported thefts we can look at seasonality. Using ggplot can we see if the number of thefts changes over time?
+```
+dplot <- bike_data %>%
+group_by(theft_date) %>%
+tally() %>%
+arrange(desc(n))
+ggplot(dplot,aes(theft_date,n)) + geom_line() +
+scale_x_date(labels = date_format("%m-%Y")) +xlab("Date") + ylab("Daily Thefts")
+```
+![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/blob/master/Other/Dataset.png)
+
+There is a definite downward trend after each month. One can guess that as we get closer to the colder months, there will be less bikes in the area to be stolen. There were even days after December where there were no thefts reported. But even with this information we can’t make any conclusions regarding causation, only that there is a strong correlation between temperature and thefts.
+
+
+
+##Time of day
+
+
+Grouping by hour of the day shows that thefts occur most often at 5PM. The plot also has an upward trend when getting closer to the end of the work day and during darker hours of the day.
+```
+ttime <- bike_prop %>%
+  group_by(theft_hour) %>%
+  tally() %>%
+  arrange(desc(n))
+plot(ttime,xlab = "Hour of the day",ylab = "Number of Thefts")
+
+> head(ttime)
+# A tibble: 6 × 2
+  theft_hour     n
+       <chr> <int>
+1         17    82
+2         18    70
+3         16    64
+4         14    63
+5         15    56
+```
+
+![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/blob/master/Other/Dataset.png)
+
+
+
+##Stolen Value
+
+This seemed like an interesting variable to look into as a more valuable bike would be more appealing to steal. But we quickly see that it would be difficult to make that conclusion. We can once again talk about correlation not being causation, meaning there probably aren’t a whole lot of $1,000+ bikes being used in Philadelphia compared to ones of lesser value. It would then make sense that there will be a much higher number of thefts for lower end bikes. The summary statistics and histogram confirm this by showing a highly right skewed distribution. More information is needed to determine likelihood of theft based on value. 
+```
+> summary(bike_data$stolen_val)
+   Min.1st Qu.  Median    Mean 3rd Qu.    Max.
+    0.0   150.0   300.0   432.3   550.0  6000.0
+
+hist(bike_data$stolen_val,xlab = "Stolen Value",main = "",breaks = 30)
+```
+![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/blob/master/Other/Dataset.png)
 
