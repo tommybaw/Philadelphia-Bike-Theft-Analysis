@@ -13,4 +13,6 @@ To pull the data, simply run the first line:
 ```
 bike <- fromJSON("https://data.phila.gov/resource/pbdj-svpx.geojson")
 ```
++
++![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/Maploop.gif)
 
