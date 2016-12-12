@@ -9,14 +9,15 @@ is to see what insights can be drawn and confirmed by previous studies using pac
 The dataset can be found here: https://www.opendataphilly.org/dataset/bicycle-thefts
 
 ## Getting started
-Make sure to have all packages installed.
 
-Then simply run the code in Analysis.R
+First make sure to have all packages installed.
 
-To pull the data, simply run:
-```
-bike <- fromJSON("https://data.phila.gov/resource/pbdj-svpx.geojson")
-```
+If you'd like to run this yourself, all code can be found at `Analysis.R`
+
+Otherwise, take a look at my findings at `Report.md`
+
+Data was pulled from `fromJSON("https://data.phila.gov/resource/pbdj-svpx.geojson")`
+
 **Current visualization:**
 ![alt tag](https://github.com/tommybaw/Philadelphia-Bike-Theft-Analysis/blob/master/Other/Maploop.gif)
 
