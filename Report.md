@@ -1,13 +1,13 @@
-#Analyzing Bike Thefts in Philadelphia
+# Analyzing Bike Thefts in Philadelphia
 
 Studies have shown that there are patterns behind bicycle thefts. Some factors include daylight/darkness, geographic location, and characteristics of the bicycle. The goal of this analysis is to see what insights can be drawn and confirmed by previous studies using packages in R. 
 
 I decided to analyze the most recent dataset uploaded by the City of Philadelphia ranging from 9/15/2014 to 2/8/2015. Included are the 804 bicycle thefts reported to the police during that time including supplemental information such as the date, time, location, and value of the bike.
 
-##Data Munging
+## Data Munging
 
 The list of packages used in my analysis.
-```
+```r
 library(jsonlite) #connecting to API
 library(dplyr) #pipeline
 library(lubridate) #to clean date/time
@@ -24,7 +24,7 @@ In order to load the data, a request was made directly through the API using jso
 - Theft_date is listed as a string
 - Numeric columns are listed as characters
 
-```
+```r
 bike <- fromJSON("https://data.phila.gov/resource/pbdj-svpx.geojson")
 bike_prop <- bike$features$properties
 bike_geom <- bike$features$geometry
@@ -48,7 +48,7 @@ List of 3
 ```
 
 This was first cleaned by unlisting coordinates into a column for latitude and longitude. I then used the dplyr and tidyr package to clean the date, time, and then selected only the relevant columns for analysis.
-```
+```r
 #Unlisting coordinate into two columns,then binding back to dataset
 coords <- data.frame(matrix(unlist(bike_geom$coordinates),nrow = 804,byrow = T)) 
 
@@ -74,10 +74,10 @@ We now have a clean dataset to work with.
 
 Now for the fun part! 
 
-##Theft Trends
+## Theft Trends
 
 With the dates of reported thefts we can look at seasonality. Using ggplot can we see if the number of thefts changes over time?
-```
+```r
 dplot <- bike_data %>%
 group_by(theft_date) %>%
 tally() %>%
@@ -91,11 +91,11 @@ There is a definite downward trend after each month. One can guess that as we ge
 
 
 
-##Time of day
+## Time of day
 
 
 Grouping by hour of the day shows that thefts occur most often at 5PM. The plot also has an upward trend when getting closer to the end of the work day and during darker hours of the day.
-```
+```r
 ttime <- bike_prop %>%
   group_by(theft_hour) %>%
   tally() %>%
@@ -117,10 +117,10 @@ plot(ttime,xlab = "Hour of the day",ylab = "Number of Thefts")
 
 
 
-##Stolen Value
+## Stolen Value
 
 This seemed like an interesting variable to look into as a more valuable bike would be more appealing to steal. But we quickly see that it would be difficult to make that conclusion. We can once again talk about correlation not being causation, meaning there probably aren’t a whole lot of $1,000+ bikes being used in Philadelphia compared to ones of lesser value. It would then make sense that there will be a much higher number of thefts for lower end bikes. The summary statistics and histogram confirm this by showing a highly right skewed distribution. More information is needed to determine likelihood of theft based on value. 
-```
+```r
 > summary(bike_data$stolen_val)
    Min.1st Qu.  Median    Mean 3rd Qu.    Max.
     0.0   150.0   300.0   432.3   550.0  6000.0
@@ -131,11 +131,11 @@ hist(bike_data$stolen_val,xlab = "Stolen Value",main = "",breaks = 30)
 
 
 
-##Geospatial Analysis
+## Geospatial Analysis
 
 One of the more interesting aspects of this dataset is the longitude and latitude information provided for the location of each theft. With the leaflet package it’s now possible to plot each point on a map of Philadelphia. To look at seasonality again, I added some color where a green dot appears for thefts in September and October, red in November and December, and blue in January and February. 
 
-```
+```r
 #Adding color to months
 bike_data$Month <- month(bike_data$theft_date,label=TRUE,abbr=TRUE)
 bike_data$Colors <- factor(bike_data$Month,labels=brewer.pal(6,'Paired'))
@@ -157,7 +157,7 @@ The mapping shows a large cluster of thefts occurring in center city and thinnin
 
 Part of the leaflet package is the option to add clusters. Hovering over each will show the area it covers while clicking will zoom in and show more refined clusters all the way down to individual incidents. Let’s go step by step on what trends we see.
 
-```
+```r
 points <- cbind(bike_data$long,bike_data$lat)
 points <- points[-796,]
 
@@ -180,14 +180,14 @@ Drexel is definitely a popular area for thefts. Good thing I never rode a bike!
 
 
 
-##Final Thoughts
+## Final Thoughts
 
 So what can we conclude after all this? 
 
 Time of day and year appear to have an effect on bicycle thefts. So we can warn people not to leave their bikes out at night or near certain heavily populated areas. But it might be more important to note that at the end of the day, the data may be biased since it only contains thefts reported to the police. With a city as large as Philadelphia there’s a good chance some neighborhoods are less likely to report a stolen bike than others.
 
 
-###Future Ideas
+### Future Ideas
 
 This initial analysis left me with some questions that I hope to see the City of Philadelphia enhancing the dataset with.
 - What type of lock was on the bike? (E.g. cable lock, U-lock, no lock)
